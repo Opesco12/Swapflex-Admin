@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import { AuthProvider } from "./contexts/authContext";
+
+import Admin from "./screens/admin";
+import AdminLogin from "./screens/Login";
+import { ProtectedRoute } from "./components/ProtextedRoute";
+import NotFound from "./screens/NotFound";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <AuthProvider>
+        <Routes>
+          <Route
+            path="/admin/login"
+            element={<AdminLogin />}
+          />
+
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/404"
+            element={<NotFound />}
+          />
+
+          <Route
+            path="*"
+            element={<Navigate to={"/404"} />}
+          />
+        </Routes>
+      </AuthProvider>
+    </Router>
   );
 }
 
