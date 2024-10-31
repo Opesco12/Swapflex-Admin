@@ -73,7 +73,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="h-screen max-w-[920px] mx-auto">
+    <div className="h-screen px-[20px] max-w-[920px] mx-auto">
       <h3 className="text-center text-2xl font-bold mb-10">
         Swapflex Admin Page
       </h3>

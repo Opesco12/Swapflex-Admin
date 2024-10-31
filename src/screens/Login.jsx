@@ -35,7 +35,7 @@ const AdminLogin = () => {
   });
 
   return (
-    <div className="bg-primary max-w-md mx-auto  p-6 bg-white rounded-lg shadow-md mt-[40px]">
+    <div className="bg-primary max-w-md mx-auto px-[20px] p-6 bg-white rounded-lg shadow-md mt-[40px]">
       <h2 className="text-2xl text-center font-bold mb-6">Admin Login</h2>
 
       {error && (
