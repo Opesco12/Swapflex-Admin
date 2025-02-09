@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import app from "../firebaseconfig";
+import app from "../../firebaseconfig";
+import { toast } from "react-toastify";
 
 const Admin = () => {
   const [status, setStatus] = useState("");
@@ -46,7 +47,8 @@ const Admin = () => {
 
   const handleSave = async (section, data) => {
     try {
-      setStatus(`Saving ${section}...`);
+      // setStatus(`Saving ${section}...`);
+      toast.info(`Saving ${section}...`);
       let path = "";
       let formattedData = data;
 
@@ -67,16 +69,19 @@ const Admin = () => {
       }
 
       await set(ref(db, path), formattedData);
-      setStatus(`${section} updated successfully!`);
+      // setStatus(`${section} updated successfully!`);
+      toast.success(`${section} updated succesfully`);
       setEditMode({ ...editMode, [section]: false });
     } catch (error) {
-      setStatus(`Error updating ${section}. Please try again.`);
+      // setStatus(`Error updating ${section}. Please try again.`);
+
+      toast.error(`Error updating ${section}. Please try again.`);
     }
   };
 
   const EditableField = ({ label, value, onChange, type = "text" }) => (
-    <div className="mb-2">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+    <div className="mb-2 ">
+      <label className="block text-sm font-medium text-silver">{label}</label>
       <input
         type={type}
         value={value}
@@ -94,8 +99,8 @@ const Admin = () => {
     };
 
     return (
-      <div className="mb-6 p-4 bg-white rounded-lg shadow">
-        <h4 className="text-xl font-semibold mb-4">{title}</h4>
+      <div className="mb-6 p-4 bg-lightBG rounded-lg shadow">
+        <h4 className="text-xl font-semibold mb-4 text-silver">{title}</h4>
         {Object.entries(editedData).map(([key, value]) => (
           <EditableField
             key={key}
@@ -136,13 +141,15 @@ const Admin = () => {
     };
 
     return (
-      <div className="bg-white p-4 shadow-lg rounded-lg">
+      <div className="bg-lightBG p-4 shadow-lg rounded-lg">
         {Object.entries(editedData).map(([currency, details]) => (
           <div
             key={currency}
-            className="mb-4"
+            className="mb-4 "
           >
-            <h5 className="font-semibold mb-2">{currency} Account</h5>
+            <h5 className="font-semibold mb-2 text-silver">
+              {currency} Account
+            </h5>
             <div className="ml-4 space-y-2">
               {Object.entries(details).map(([field, value]) => (
                 <EditableField
@@ -181,14 +188,16 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen px-[20px] max-w-[920px] mx-auto py-8">
-      <h3 className="text-center text-2xl font-bold mb-10">
+      <h3 className="text-center text-2xl font-bold mb-10 text-silver">
         Swapflex Admin Page
       </h3>
 
       {/* Exchange Rates Section */}
       <div className="mb-8">
-        <h4 className="text-xl font-semibold mb-4">Exchange Rates</h4>
-        <div className="bg-white p-4 shadow-lg rounded-lg overflow-hidden">
+        <h4 className="text-xl font-semibold mb-4 text-silver">
+          Exchange Rates
+        </h4>
+        <div className="bg-lightBG p-4 shadow-lg rounded-lg overflow-hidden">
           {editMode.rates ? (
             <div className="space-y-4">
               {rates.map((rate, index) => (
@@ -238,10 +247,10 @@ const Admin = () => {
                     key={index}
                     className="flex justify-between items-center border-b pb-2"
                   >
-                    <span className="text-lg font-medium">
+                    <span className="text-lg font-medium text-silver">
                       {rate.currency}:
                     </span>
-                    <span className="text-lg">{rate.rate}</span>
+                    <span className="text-lg text-silver">{rate.rate}</span>
                   </div>
                 ))}
               </div>
@@ -258,7 +267,9 @@ const Admin = () => {
 
       {/* Payment Methods Section */}
       <div className="mb-8">
-        <h4 className="text-xl font-semibold mb-4">Payment Methods</h4>
+        <h4 className="text-xl font-semibold mb-4 text-silver">
+          Payment Methods
+        </h4>
         {payments &&
           (editMode.payments ? (
             <div className="space-y-4">
@@ -280,16 +291,18 @@ const Admin = () => {
               {Object.entries(payments).map(([method, data]) => (
                 <div
                   key={method}
-                  className="mb-6 p-4 bg-white rounded-lg shadow"
+                  className="mb-6 p-4 bg-lightBG rounded-lg shadow"
                 >
-                  <h4 className="text-xl font-semibold mb-4">{method}</h4>
+                  <h4 className="text-xl font-semibold mb-4 text-silver">
+                    {method}
+                  </h4>
                   {Object.entries(data).map(([key, value]) => (
                     <div
                       key={key}
                       className="ml-4 mb-2"
                     >
-                      <span className="font-medium">{key}: </span>
-                      <span className="text-gray-700">{value}</span>
+                      <span className="font-medium text-silver">{key}: </span>
+                      <span className="text-gray-700 text-silver">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -305,8 +318,8 @@ const Admin = () => {
       </div>
 
       {/* Currency Exchange Account Section */}
-      <div className="mb-8">
-        <h4 className="text-xl font-semibold mb-4">
+      <div className="mb-8 b">
+        <h4 className="text-xl font-semibold mb-4 text-silver">
           Currency Exchange Account
         </h4>
         {exchangeAccount && (
@@ -318,18 +331,22 @@ const Admin = () => {
                 onCancel={() => setEditMode({ ...editMode, account: false })}
               />
             ) : (
-              <div className="bg-white p-4 shadow-lg rounded-lg">
+              <div className="bg-lightBG p-4 shadow-lg rounded-lg">
                 {Object.entries(exchangeAccount).map(([currency, details]) => (
                   <div
                     key={currency}
                     className="mb-4"
                   >
-                    <h5 className="font-semibold mb-2">{currency} Account</h5>
+                    <h5 className="font-semibold mb-2 text-silver">
+                      {currency} Account
+                    </h5>
                     <div className="ml-4 space-y-2">
                       {Object.entries(details).map(([field, value]) => (
                         <p key={field}>
-                          <span className="font-medium">{field}: </span>
-                          <span className="text-gray-700">{value}</span>
+                          <span className="font-medium text-silver">
+                            {field}:{" "}
+                          </span>
+                          <span className="text-silver">{value}</span>
                         </p>
                       ))}
                     </div>
@@ -347,11 +364,11 @@ const Admin = () => {
         )}
       </div>
 
-      {status && (
+      {/* {status && (
         <div className="mt-4 p-2 bg-gray-100 border-l-4 border-blue-500 text-blue-700">
           {status}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
 import {
   getAuth,
@@ -6,9 +5,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, child } from "firebase/database";
 
 import app from "../firebaseconfig";
+import Loader from "../components/Loader";
 
 const AuthContext = createContext();
 
@@ -28,6 +28,19 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error checking admin status:", error);
       return false;
+    }
+  };
+
+  const userLogin = async (email, password) => {
+    try {
+      const userCredentual = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      return userCredentual;
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -70,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     return unsubscribe;
-  }, []);
+  }, [auth]);
 
   const value = {
     user,
@@ -78,11 +91,19 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     loading,
+    setLoading,
+    userLogin,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {loading ? (
+        <div className="h-screen flex items-center justify-center">
+          <Loader />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
