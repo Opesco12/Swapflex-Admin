@@ -39,7 +39,7 @@ const UserLogin = () => {
 
   return (
     <div className="flex flex-1 h-screen  justify-center items-center">
-      <div className="bg-lightBG  mx-auto px-[20px] p-6 rounded-lg shadow-md mt-[40px] w-1/2">
+      <div className="bg-lightBG  mx-auto px-[20px] p-6 rounded-lg shadow-md mt-[40px] w-3/4 md:w-1/2">
         <h2 className="text-2xl text-center font-bold mb-6 text-silver">
           Login to your account
         </h2>

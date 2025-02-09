@@ -19,6 +19,8 @@ const BankTransfer = () => {
   const { currency } = useParams();
   const { USDAccountDetails, rates } = useData();
 
+  console.log(USDAccountDetails);
+
   if (currency !== "USD" && currency !== "EUR") {
     navigate("/404");
   }
